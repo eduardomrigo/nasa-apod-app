@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import Image from 'next/image'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -48,10 +48,6 @@ export default function APODDisplay() {
       setLoading(false)
     }
   }, [date, startDate, endDate])
-
-  useEffect(() => {
-    fetchAPOD()
-  }, [fetchAPOD])
 
   if (loading) {
     return <div className="text-center">Loading...</div>
