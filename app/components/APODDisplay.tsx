@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -25,14 +25,21 @@ export default function APODDisplay() {
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const API_KEY = 'gaCPPaW0CEkZK1lpls0CDBTbXOZz7eIxh06Rrd62'
 
-  const fetchAPOD = useCallback(async () => {
+  async function fetchAPOD() {
     setLoading(true)
+    setError(null)
     let url = `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}`
 
     if (startDate && endDate) {
+      if (new Date(startDate) > new Date(endDate)) {
+        setError('End date cannot be earlier than start date.')
+        setLoading(false)
+        return
+      }
       url += `&start_date=${startDate}&end_date=${endDate}`
     } else if (date) {
       url += `&date=${date}`
@@ -47,7 +54,11 @@ export default function APODDisplay() {
     } finally {
       setLoading(false)
     }
-  }, [date, startDate, endDate])
+  }
+
+  useEffect(() => {
+    fetchAPOD()
+  }, [])
 
   if (loading) {
     return <div className="text-center">Loading...</div>
@@ -136,6 +147,7 @@ export default function APODDisplay() {
             <CardTitle>APOD Options</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
+            {error && <div className="text-red-500">{error}</div>}
             <div className="space-y-2">
               <Label htmlFor="date">Specific Date</Label>
               <Input
