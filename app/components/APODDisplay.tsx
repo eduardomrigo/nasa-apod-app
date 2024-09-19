@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -28,7 +28,7 @@ export default function APODDisplay() {
 
   const API_KEY = 'gaCPPaW0CEkZK1lpls0CDBTbXOZz7eIxh06Rrd62'
 
-  async function fetchAPOD() {
+  const fetchAPOD = useCallback(async () => {
     setLoading(true)
     let url = `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}`
 
@@ -47,7 +47,7 @@ export default function APODDisplay() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [date, startDate, endDate])
 
   useEffect(() => {
     fetchAPOD()
