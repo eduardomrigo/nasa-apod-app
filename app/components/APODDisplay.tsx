@@ -51,7 +51,7 @@ export default function APODDisplay() {
 
   useEffect(() => {
     fetchAPOD()
-  }, [])
+  }, [fetchAPOD])
 
   if (loading) {
     return <div className="text-center">Loading...</div>

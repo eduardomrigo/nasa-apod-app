@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 
 // Import icons from lucide-react
-import { Home, Image, Rocket, Star } from 'lucide-react'
+import { Image, Rocket, Star } from 'lucide-react'
 import APODDisplay from './APODDisplay'
 
 const tabs = [
