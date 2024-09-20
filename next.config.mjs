@@ -15,6 +15,18 @@ const nextConfig = {
                 port: "",
                 pathname: "/apod/image/**",
             },
+            {
+                protocol: "http", 
+                hostname: "mars.jpl.nasa.gov",
+                port: "",
+                pathname: "/msl-raw-images/**",
+            },
+            {
+                protocol: "http",
+                hostname: "mars.nasa.gov",
+                port: "",
+                pathname: "/mer/gallery/**",
+            },
         ],
     },
 };

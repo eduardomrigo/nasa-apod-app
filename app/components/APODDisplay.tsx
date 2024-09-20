@@ -6,6 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { AlertCircle } from "lucide-react"
 
 interface APODData {
   copyright?: string
@@ -18,7 +20,11 @@ interface APODData {
   url: string
 }
 
-export default function APODDisplay() {
+interface APODDisplayProps {
+  API_KEY: string
+}
+
+export default function APODDisplay({ API_KEY }: APODDisplayProps) {
   const [apodData, setApodData] = useState<APODData | APODData[] | null>(null)
   const [showFullExplanation, setShowFullExplanation] = useState(false)
   const [date, setDate] = useState('')
@@ -27,9 +33,12 @@ export default function APODDisplay() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const API_KEY = 'gaCPPaW0CEkZK1lpls0CDBTbXOZz7eIxh06Rrd62'
-
   async function fetchAPOD() {
+    if (!API_KEY) {
+      setError("API key is missing. Please set your NASA API key.")
+      return
+    }
+
     setLoading(true)
     setError(null)
     let url = `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}`
@@ -47,21 +56,41 @@ export default function APODDisplay() {
 
     try {
       const res = await fetch(url)
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`)
+      }
       const data = await res.json()
+      if (data.error) {
+        throw new Error(data.error.message || 'An error occurred while fetching data')
+      }
       setApodData(data)
     } catch (error) {
       console.error('Error fetching APOD:', error)
+      setError(error instanceof Error ? error.message : 'An unknown error occurred')
+      setApodData(null)
     } finally {
       setLoading(false)
     }
   }
 
   useEffect(() => {
-    fetchAPOD()
-  }, [])
+    if (API_KEY) {
+      fetchAPOD()
+    }
+  }, [API_KEY])
 
   if (loading) {
     return <div className="text-center">Loading...</div>
+  }
+
+  if (error) {
+    return (
+      <Alert variant="destructive">
+        <AlertCircle className="h-4 w-4" />
+        <AlertTitle>Error</AlertTitle>
+        <AlertDescription>{error}</AlertDescription>
+      </Alert>
+    )
   }
 
   if (!apodData) {
@@ -79,7 +108,7 @@ export default function APODDisplay() {
         <CardHeader>
           <CardTitle className="text-xl font-bold">{data.title}</CardTitle>
           <CardDescription className="text-sm text-muted-foreground">
-            Date: {new Date(data.date).toISOString().split('T')[0]}
+            Date: {data.date}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -117,14 +146,16 @@ export default function APODDisplay() {
           <p className="text-sm text-muted-foreground">
             {data.copyright ? `© ${data.copyright}` : 'Public Domain'}
           </p>
-          <a
-            href={data.hdurl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm text-primary hover:underline"
-          >
-            View Full Resolution
-          </a>
+          {data.hdurl && (
+            <a
+              href={data.hdurl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-primary hover:underline"
+            >
+              View Full Resolution
+            </a>
+          )}
         </CardFooter>
       </Card>
     )
@@ -147,7 +178,6 @@ export default function APODDisplay() {
             <CardTitle>APOD Options</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {error && <div className="text-red-500">{error}</div>}
             <div className="space-y-2">
               <Label htmlFor="date">Specific Date</Label>
               <Input
