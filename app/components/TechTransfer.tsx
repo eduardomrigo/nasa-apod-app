@@ -22,6 +22,10 @@ interface TechTransferProps {
   API_KEY: string
 }
 
+interface NasaTechTransferResult {
+  [index: number]: string
+}
+
 export default function TechTransfer({ API_KEY }: TechTransferProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [searchType, setSearchType] = useState('patent')
@@ -37,7 +41,7 @@ export default function TechTransfer({ API_KEY }: TechTransferProps) {
       const response = await fetch(`https://api.nasa.gov/techtransfer/${searchType}/?${searchTerm}&api_key=${API_KEY}`)
       const data = await response.json()
 
-      const formattedResults: TechResult[] = data.results.map((result: any[]) => ({
+      const formattedResults: TechResult[] = data.results.map((result: NasaTechTransferResult) => ({
         id: result[0],
         code: result[1],
         title: result[2].replace(/<\/?span[^>]*>/g, ""),

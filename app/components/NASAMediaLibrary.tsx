@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useState } from 'react'
+import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -21,11 +21,27 @@ interface MediaItem {
   href: string
 }
 
-interface NASAMediaLibraryProps {
-  API_KEY: string
+interface NasaApiResponse {
+  collection: {
+    items: {
+      data: [{
+        nasa_id: string
+        title: string
+        description: string
+        media_type: string
+        date_created: string
+        center: string
+        photographer?: string
+        keywords: string[]
+      }]
+      links: [{
+        href: string
+      }]
+    }[]
+  }
 }
 
-export default function NASAMediaLibrary({ API_KEY }: NASAMediaLibraryProps) {
+export default function NASAMediaLibrary() {
   const [searchTerm, setSearchTerm] = useState('')
   const [mediaType, setMediaType] = useState('image')
   const [results, setResults] = useState<MediaItem[]>([])
@@ -39,9 +55,9 @@ export default function NASAMediaLibrary({ API_KEY }: NASAMediaLibraryProps) {
     setLoading(true)
     try {
       const response = await fetch(`https://images-api.nasa.gov/search?q=${searchTerm}&media_type=${mediaType}`)
-      const data = await response.json()
+      const data: NasaApiResponse = await response.json()
 
-      const formattedResults: MediaItem[] = data.collection.items.map((item: any) => ({
+      const formattedResults: MediaItem[] = data.collection.items.map((item) => ({
         nasa_id: item.data[0].nasa_id,
         title: item.data[0].title,
         description: item.data[0].description,

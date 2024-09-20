@@ -133,7 +133,7 @@ export default function Dashboard() {
                     {activeTab === 'APOD' && <APODDisplay API_KEY={apiKey} />}
                     {activeTab === 'NEO' && <NEODisplay API_KEY={apiKey} />}
                     {activeTab === 'Tech Transfer' && <TechTransfer API_KEY={apiKey} />}
-                    {activeTab === 'Image and Videos' && <NASAMediaLibrary API_KEY={apiKey} />}
+                    {activeTab === 'Image and Videos' && <NASAMediaLibrary />}
                     {activeTab === 'MARS Rover Photos' && <MarsRoverPhotos API_KEY={apiKey} />}
                 </CardContent>
             </Card>
