@@ -27,6 +27,12 @@ const nextConfig = {
                 port: "",
                 pathname: "/mer/gallery/**",
             },
+            {
+                protocol: "https",
+                hostname: "epic.gsfc.nasa.gov",
+                port: "",
+                pathname: "/archive/**",
+            },
         ],
     },
 };

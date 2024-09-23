@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Check, Copy, Cpu, Earth, Image, Orbit, Rocket, TvMinimalPlay } from 'lucide-react'
+import { Check, Copy, Cpu, Earth, Image, Orbit, Rocket, Satellite, TvMinimalPlay } from 'lucide-react'
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import APODDisplay from './APODDisplay'
 import NEODisplay from './NEODisplay'
@@ -15,6 +15,7 @@ import MarsRoverPhotos from './MarsRoverPhotos'
 import { useToast } from '@/hooks/use-toast'
 import { Badge } from '@/components/ui/badge'
 import EarthImagery from './EarthImagery'
+import EPICImagery from './EPICImagery'
 
 const tabs = [
     { name: 'APOD', icon: Image },
@@ -22,7 +23,8 @@ const tabs = [
     { name: 'Tech Transfer', icon: Cpu },
     { name: 'Image and Videos', icon: TvMinimalPlay },
     { name: 'MARS Rover Photos', icon: Orbit },
-    { name: 'Earth', icon: Earth },
+    { name: 'Earth Imagery', icon: Earth },
+    { name: 'EPIC Imagery', icon: Satellite },
 ]
 
 export default function Dashboard() {
@@ -137,7 +139,8 @@ export default function Dashboard() {
                     {activeTab === 'Tech Transfer' && <TechTransfer API_KEY={apiKey} />}
                     {activeTab === 'Image and Videos' && <NASAMediaLibrary />}
                     {activeTab === 'MARS Rover Photos' && <MarsRoverPhotos API_KEY={apiKey} />}
-                    {activeTab === 'Earth' && <EarthImagery API_KEY={apiKey} />}
+                    {activeTab === 'Earth Imagery' && <EarthImagery API_KEY={apiKey} />}
+                    {activeTab === 'EPIC Imagery' && <EPICImagery API_KEY={apiKey} />}
                 </CardContent>
             </Card>
         )
