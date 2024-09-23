@@ -50,8 +50,9 @@ export default function EPICImagery({ API_KEY }: EPICImageryProps) {
       if (dates.length > 0) {
         setDate(dates[0])
       }
-    } catch (err) {
+    } catch (error) {
       setError('Error fetching available dates')
+      console.error('Error fetching available dates:', error)
     } finally {
       setLoading(false)
     }
@@ -70,8 +71,9 @@ export default function EPICImagery({ API_KEY }: EPICImageryProps) {
       const imagesData = await response.json()
       setImages(imagesData)
       setCurrentImageIndex(0)
-    } catch (err) {
+    } catch (error) {
       setError('Error fetching images for the selected date')
+      console.error('Error fetching images:', error)
     } finally {
       setLoading(false)
     }
