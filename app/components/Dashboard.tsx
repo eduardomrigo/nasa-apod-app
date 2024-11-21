@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Check, Copy, Cpu, Earth, Image, Orbit, Rocket, Satellite, TvMinimalPlay } from 'lucide-react'
+import { Check, Copy, Cpu, Earth, Image, Orbit, Rocket, Satellite, TvMinimalPlay, Menu } from 'lucide-react'
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import APODDisplay from './APODDisplay'
 import NEODisplay from './NEODisplay'
@@ -34,6 +34,7 @@ export default function Dashboard() {
     const [isApiKeySet, setIsApiKeySet] = useState(false)
     const { toast } = useToast()
     const [isCopied, setIsCopied] = useState(false)
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
     useEffect(() => {
         const storedApiKey = localStorage.getItem('nasaApiKey')
@@ -81,6 +82,10 @@ export default function Dashboard() {
         })
     }
 
+    const toggleSidebar = () => {
+        setIsSidebarOpen(!isSidebarOpen)
+    }
+
     const renderContent = () => {
         if (!isApiKeySet) {
             return (
@@ -88,27 +93,27 @@ export default function Dashboard() {
                     <CardContent className="p-6">
                         <Alert className="mb-4">
                             <AlertDescription>
-                                    <p>You can use this API key:</p>
-                                    <div className='flex gap-2 items-center'>
-                                        <Badge variant="secondary" className="mb-2 mt-2">
+                                <p>You can use this API key:</p>
+                                <div className='flex flex-wrap gap-2 items-center'>
+                                    <Badge variant="secondary" className="mb-2 mt-2 break-all">
                                         gaCPPaW0CEkZK1lpls0CDBTbXOZz7eIxh06Rrd62
-                                        </Badge>
-                                        <Button
-                                            size="sm"
-                                            variant="outline"
-                                            className="h-6 px-2 rounded-full"
-                                            onClick={copyApiKey}
-                                        >
-                                            {isCopied ? (
-                                                <Check className="h-3 w-3" />
-                                            ) : (
-                                                <Copy className="h-3 w-3" />
-                                            )}
-                                            <span className="sr-only">
-                                                {isCopied ? "Copied" : "Copy API Key"}
-                                            </span>
-                                        </Button>
-                                    </div>
+                                    </Badge>
+                                    <Button
+                                        size="sm"
+                                        variant="outline"
+                                        className="h-6 px-2 rounded-full"
+                                        onClick={copyApiKey}
+                                    >
+                                        {isCopied ? (
+                                            <Check className="h-3 w-3" />
+                                        ) : (
+                                            <Copy className="h-3 w-3" />
+                                        )}
+                                        <span className="sr-only">
+                                            {isCopied ? "Copied" : "Copy API Key"}
+                                        </span>
+                                    </Button>
+                                </div>
                                 <p>However, you may experience issues with daily request limits. To create your own key, visit: <a href="https://api.nasa.gov/" target="_blank" rel="noopener noreferrer" className="underline">https://api.nasa.gov/</a></p>
                             </AlertDescription>
                         </Alert>
@@ -127,7 +132,7 @@ export default function Dashboard() {
                             <Button type="submit" className="w-full">Save API Key</Button>
                         </form>
                     </CardContent>
-                </Card >
+                </Card>
             )
         }
 
@@ -147,9 +152,17 @@ export default function Dashboard() {
     }
 
     return (
-        <div className="flex h-screen bg-gray-100">
+        <div className="flex flex-col md:flex-row h-screen bg-gray-100">
+            {/* Mobile menu button */}
+            <div className="md:hidden p-4 bg-white shadow-md">
+                <Button onClick={toggleSidebar} variant="outline" className="w-full flex justify-between items-center">
+                    <span>Menu</span>
+                    <Menu className="h-5 w-5" />
+                </Button>
+            </div>
+
             {/* Sidebar */}
-            <div className="w-64 bg-white shadow-md">
+            <div className={`${isSidebarOpen ? 'block' : 'hidden'} md:block w-full md:w-64 bg-white shadow-md`}>
                 <div className="p-4">
                     <h1 className="text-2xl font-bold text-gray-800">NASA Dashboard</h1>
                 </div>
@@ -159,7 +172,10 @@ export default function Dashboard() {
                             key={tab.name}
                             variant={activeTab === tab.name ? 'default' : 'ghost'}
                             className={`w-full justify-start px-4 py-2 text-left ${activeTab === tab.name ? 'text-white' : 'text-gray-600'}`}
-                            onClick={() => setActiveTab(tab.name)}
+                            onClick={() => {
+                                setActiveTab(tab.name)
+                                setIsSidebarOpen(false)
+                            }}
                         >
                             <tab.icon className={`mr-2 size-4 ${activeTab === tab.name ? 'text-white' : 'text-gray-600'}`} />
                             {tab.name}
@@ -176,9 +192,10 @@ export default function Dashboard() {
             </div>
 
             {/* Main content area */}
-            <div className="flex-1 p-8 overflow-auto">
+            <div className="flex-1 p-4 md:p-8 overflow-auto">
                 {renderContent()}
             </div>
         </div>
     )
 }
+
