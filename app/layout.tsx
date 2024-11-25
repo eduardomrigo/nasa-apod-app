@@ -39,12 +39,12 @@ export const metadata: Metadata = {
     siteName: 'NASA Dashboard',
     images: [
       {
-        url: 'https://www.nasa.eduardev.com/images/bg.png',
+        url: 'https://nasa.eduardev.com/images/bg.png',
         width: 800,
         height: 600,
       },
       {
-        url: 'https://www.nasa.eduardev.com/images/bg-g.png',
+        url: 'https://nasa.eduardev.com/images/bg-g.png',
         width: 1800,
         height: 1600,
       },
