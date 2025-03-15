@@ -16,6 +16,7 @@ import { useToast } from '@/hooks/use-toast'
 import { Badge } from '@/components/ui/badge'
 import EarthImagery from './EarthImagery'
 import EPICImagery from './EPICImagery'
+import CustomButton from '@/components/AuthorButton'
 
 const tabs = [
     { name: 'APOD', icon: Image },
@@ -161,37 +162,40 @@ export default function Dashboard() {
                 </Button>
             </div>
 
-            {/* Sidebar */}
-            <div className={`${isSidebarOpen ? 'block' : 'hidden'} md:block w-full md:w-64 bg-white shadow-md`}>
+            <div className={`${isSidebarOpen ? 'block' : 'hidden'} md:block w-full md:w-64 bg-white shadow-md h-screen flex flex-col`}>
                 <div className="p-4">
                     <h1 className="text-2xl font-bold text-gray-800">NASA Dashboard</h1>
                 </div>
-                <nav className="mt-4">
-                    {tabs.map((tab) => (
-                        <Button
-                            key={tab.name}
-                            variant={activeTab === tab.name ? 'default' : 'ghost'}
-                            className={`w-full justify-start px-4 py-2 text-left ${activeTab === tab.name ? 'text-white' : 'text-gray-600'}`}
-                            onClick={() => {
-                                setActiveTab(tab.name)
-                                setIsSidebarOpen(false)
-                            }}
-                        >
-                            <tab.icon className={`mr-2 size-4 ${activeTab === tab.name ? 'text-white' : 'text-gray-600'}`} />
-                            {tab.name}
-                        </Button>
-                    ))}
-                </nav>
-                {isApiKeySet && (
-                    <div className="p-4">
-                        <Button onClick={handleClearApiKey} variant="outline" className="w-full">
-                            Clear API Key
-                        </Button>
-                    </div>
-                )}
+                <div className="flex-1 flex flex-col gap-2  h-[calc(100vh-200px)]  overflow-auto">
+                    <nav className="mt-4">
+                        {tabs.map((tab) => (
+                            <Button
+                                key={tab.name}
+                                variant={activeTab === tab.name ? 'default' : 'ghost'}
+                                className={`w-full justify-start px-4 py-2 text-left ${activeTab === tab.name ? 'text-white' : 'text-gray-600'}`}
+                                onClick={() => {
+                                    setActiveTab(tab.name)
+                                    setIsSidebarOpen(false)
+                                }}
+                            >
+                                <tab.icon className={`mr-2 size-4 ${activeTab === tab.name ? 'text-white' : 'text-gray-600'}`} />
+                                {tab.name}
+                            </Button>
+                        ))}
+                    </nav>
+                    {isApiKeySet && (
+                        <div className="p-4">
+                            <Button onClick={handleClearApiKey} variant="outline" className="w-full">
+                                Clear API Key
+                            </Button>
+                        </div>
+                    )}
+                </div>
+                <div className="p-4">
+                    <CustomButton />
+                </div>
             </div>
 
-            {/* Main content area */}
             <div className="flex-1 p-4 md:p-8 overflow-auto">
                 {renderContent()}
             </div>
